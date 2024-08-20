@@ -1,0 +1,15 @@
+{
+    "params":
+    {
+        "local_server": "True",
+        "local_uri": "mysql://root:@localhost/code pieces blog",
+        "production_uri": "mysql://root:@localhost/code pieces blog",
+        "fb_url": "https://facebook.com/codepieces",
+        "tw_url": "https://twitter.com/codepieces",
+        "gh_url": "https://github.com/codepieces",
+        "blog_name": "Code Pieces"
+    }
+
+
+
+}

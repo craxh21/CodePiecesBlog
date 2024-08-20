@@ -1,14 +1,26 @@
-
-from flask import Flask, render_template , request
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
+
+local_server = True
+
+with open('config.json', 'r') as c:
+    params = json.load(c)["params"]
+
+
 
 app = Flask(__name__)
-
 # configure the SQLite database, relative to the app instance folder
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/code pieces blog' 
+"""app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/code pieces blog' """
+
+if(local_server):
+    app.config['SQLALCHEMY_DATABASE_URI'] = params['local_uri']
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = params['production_uri']
 
 db = SQLAlchemy(app)
+
 
 class Contacts(db.Model):
    
@@ -19,15 +31,16 @@ class Contacts(db.Model):
     msg = db.Column(db.String(120), nullable=False)
     date = db.Column(db.String(12), nullable=True)
 
-@app.route("/" )
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template('index.html', params= params)
 
 @app.route("/about")
 def about():
-    return render_template('about.html')
+    return render_template('about.html', params= params)
 
-@app.route("/contact", methods = ['GET', 'POST'])
+
+@app.route("/contact", methods = ['GET', 'POST'])   #get req ... used to fetch the index.html
 def contact():
     if(request.method=='POST'):
         # this if fetching entry from the db
@@ -43,14 +56,13 @@ def contact():
         db.session.add(entry)
         db.session.commit()
         
-    return render_template('contact.html')
+    return render_template('contact.html', params= params)
+
 
 
 
 @app.route("/post")
 def post():
-    return render_template('post.html')
+    return render_template('post.html', params=params)
 
-app.run(debug= True) 
-
-
+app.run(debug= True)
