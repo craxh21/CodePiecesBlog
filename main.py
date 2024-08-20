@@ -1,11 +1,9 @@
-from flask import Flask #Flask is a class inside flask module
-app = Flask(__name__)#main app instance
+from flask import Flask, render_template 
+app = Flask(__name__)
 
 
-@app.route("/")  #it is the default route for an app
+@app.route("/")  #
 def home():
-    return 'Hello User'
+    return render_template('index.html')
 
-app.run(debug= True)  # python app wil not run if you don't write this
-# And writing debug = True ..the compiler will automaticaly load the changes So you don't need to run the app again and agian.
-#Just save the file and reload the brouser
+app.run(debug= True)  
