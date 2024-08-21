@@ -1,5 +1,5 @@
 {
-    "params":
+    "params2":
     {
         "local_server": "True",
         "local_uri": "mysql://root:@localhost/code pieces blog",
@@ -7,7 +7,11 @@
         "fb_url": "https://facebook.com/codepieces",
         "tw_url": "https://twitter.com/codepieces",
         "gh_url": "https://github.com/codepieces",
-        "blog_name": "Code Pieces"
+        "blog_name": "Code Pieces",
+
+        "gmail_user": "",        "//comment": "add your gmail you want to recieve email on email on",
+        "gmail_password": "'"
+
     }
 
 
