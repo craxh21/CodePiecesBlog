@@ -47,6 +47,16 @@ class Contacts(db.Model):
     msg = db.Column(db.String(120), nullable=False)
     date = db.Column(db.String(12), nullable=True)
 
+class Posts(db.Model):
+    sno = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80),  nullable=False)
+    slug = db.Column(db.String(21), nullable=False)  #slug is the remaining part of url seen besides the main name of the url. 
+    content = db.Column(db.String(120), nullable=False)
+    img_file = db.Column(db.String(12), nullable=True)
+    date = db.Column(db.String(12), nullable=True)
+
+
+
 @app.route("/")
 def home():
     return render_template('index.html', params= params)
@@ -58,14 +68,15 @@ def about():
 
 @app.route("/contact", methods=['GET', 'POST'])
 def contact():
-    if request.method == 'POST':
+    if request.method == 'POST':  #i.e when the user clicks on send button
         # Fetching entry from the form
         name = request.form.get('name')
         email = request.form.get('email')
         phone = request.form.get('phone')
         message = request.form.get('message')
 
-        # Making entry in the database
+        # Making entry in the database 
+        # #lhs are var names in the db and the rhs are the var names used in this file to store the fetched values from the user entry
         entry = Contacts(name=name, phone_num=phone, msg=message, email=email, date=datetime.now())
         db.session.add(entry)
         db.session.commit()
@@ -89,11 +100,14 @@ def contact():
     return render_template('contact.html', params=params)
 
 
+@app.route("/post/<string:post_slug>", methods=['GET'])
+def post_func(post_slug):
+    #creating object post2 of class Posts
+    post2 = Posts.query.filter_by( slug = post_slug ).first()  #filter by slug named post_slug . and select the first tuple in the table
+
+    return render_template('post.html', params=params, post = post2) # pass the post with post2 object created before
 
 
 
-@app.route("/post")
-def post():
-    return render_template('post.html', params=params)
 
 app.run(debug= True)
