@@ -50,6 +50,7 @@ class Contacts(db.Model):
 class Posts(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80),  nullable=False)
+    tagline = db.Column(db.String(50),  nullable=False)
     slug = db.Column(db.String(21), nullable=False)  #slug is the remaining part of url seen besides the main name of the url. 
     content = db.Column(db.String(120), nullable=False)
     img_file = db.Column(db.String(12), nullable=True)
@@ -59,7 +60,8 @@ class Posts(db.Model):
 
 @app.route("/")
 def home():
-    return render_template('index.html', params= params)
+    posts = Posts.query.filter_by().all()[0: params['no_of_posts']]
+    return render_template('index.html', params= params, posts = posts ) #lhs is the posts object used in the index.html file and the rhs is the posts object declared in this function
 
 @app.route("/about")
 def about():
