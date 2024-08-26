@@ -60,8 +60,17 @@ class Posts(db.Model):
 
 @app.route("/")
 def home():
-    posts = Posts.query.filter_by().all()[0: params['no_of_posts']]
+    posts = Posts.query.filter_by().all()[0: params['no_of_posts_on_home_page']]
     return render_template('index.html', params= params, posts = posts ) #lhs is the posts object used in the index.html file and the rhs is the posts object declared in this function
+
+@app.route("/dashboard", methods=['GET', 'POST'])
+def dashboard():
+    if(request.method=='POST'):
+        #redirect to admin panel
+        pass
+
+    else:
+        return render_template('login.html', params= params)
 
 @app.route("/about")
 def about():
