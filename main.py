@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_mail import Mail, Message  
@@ -18,6 +18,8 @@ with open('config.json', 'r') as c:  #open the json file in read mode
 app = Flask(__name__)
 # configure the SQLite database, relative to the app instance folder
 """app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/code pieces blog' """
+
+app.secret_key = 'the_random_string'  #setting a secret key 
 
 app.config.update(
     MAIL_SERVER='smtp.gmail.com',
@@ -65,12 +67,23 @@ def home():
 
 @app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
+
+    if( 'user' in session  and session['user'] == params['admin_user']):
+        posts = Posts.query.all()
+        return render_template('dashboard.html', params = params, posts = posts)
+
     if(request.method=='POST'):
         #redirect to admin panel
-        pass
+        username = request.form.get('uname')
+        userpass = request.form.get('pass')
+        if(username == params['admin_user']  and  userpass == params['admin_password']):
+            #set session variable
+            session['user'] = username
+            posts = Posts.query.all()
+            return render_template('dashboard.html', params = params, posts= posts)
 
-    else:
-        return render_template('login.html', params= params)
+    return render_template('login.html', params= params)
+    
 
 @app.route("/about")
 def about():
