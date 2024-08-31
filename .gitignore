@@ -10,6 +10,8 @@ config.json
 *.so
 
 # Distribution / packaging
+files/  
+
 .Python
 build/
 develop-eggs/

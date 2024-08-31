@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_mail import Mail, Message  
 import os
+from werkzeug.utils import secure_filename
 from dotenv import load_dotenv  #to load the environment variables from the .env file into flask app
 
 import json
@@ -20,6 +21,8 @@ app = Flask(__name__)
 """app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/code pieces blog' """
 
 app.secret_key = 'the_random_string'  #setting a secret key 
+
+app.config['UPLOAD_FOLDER'] = params['upload_location']  #configuring the upload location
 
 app.config.update(
     MAIL_SERVER='smtp.gmail.com',
@@ -115,6 +118,15 @@ def edit(sno):
         # for that post on which the user currently is on
         post = Posts.query.filter_by(sno = sno ).first() 
         return render_template('edit.html', params = params, post= post)
+
+@app.route("/uploader", methods=['GET', 'POST'])
+def uploader():
+    if('user' in session and session['user']==params['admin_user']):
+        if (request.method=='POST'):
+            f = request.files['fileName']  
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename) ))
+            return "Uploaded Successfully"
+
 
 
 @app.route("/about")

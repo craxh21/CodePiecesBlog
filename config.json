@@ -16,7 +16,9 @@
 
         "login_img": "login.svg",
         "admin_user": "craxh",
-        "admin_password":"craxh21blog"
+        "admin_password":"craxh21blog",
+
+        "upload_location": "C:\\Users\\Administrator\\OneDrive\\Desktop\\coding\\Python\\Learning_Python\\CodePiecesBlog\\files"
 
     }
 
