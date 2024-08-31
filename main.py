@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_mail import Mail, Message  
@@ -88,19 +88,33 @@ def dashboard():
 @app.route("/edit/<string:sno>", methods = ['GET', 'POST'])
 def edit(sno):
     if( 'user' in session  and session['user'] == params['admin_user']):
-        if(request.method == 'POST'):
+        if(request.method == 'POST'):  #take all the fields from the userInput
             box_title = request.form.get('title') 
             tline = request.form.get('tline') 
             slug= request.form.get('slug') 
             content= request.form.get('content') 
             img_file= request.form.get('img_file') 
             date = datetime.now()
-            if sno =='0':
+            if sno =='0':#if sno = 0 means we have to add  a new Post
+                #this is done by creating an obeject of class Posts and passing all the values fetched fromthe userInput
                 post = Posts(title = box_title, slug = slug, content= content, tagline = tline, img_file = img_file, date=date)
                 db.session.add(post)
                 db.session.commit()
+            else:  #if sno is other than 0 means we are editing exixting post
+                post = Posts.query.filter_by(sno = sno).first()
+                post.title = box_title
+                post.slug = slug
+                post.content = content
+                post.tagline = tline
+                post.img_file = img_file
+                post.date = date
 
-        return render_template('edit.html', params = params, sno = sno)
+                db.session.commit()
+                return redirect('/edit/' + sno)
+        #when not cliccked on submit button yet the user will be shone the value of the attributes 
+        # for that post on which the user currently is on
+        post = Posts.query.filter_by(sno = sno ).first() 
+        return render_template('edit.html', params = params, post= post)
 
 
 @app.route("/about")
