@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from dotenv import load_dotenv  #to load the environment variables from the .env file into flask app
 
 import json
-
+import math
 
 local_server = True
 
@@ -65,8 +65,32 @@ class Posts(db.Model):
 
 @app.route("/")
 def home():
-    posts = Posts.query.filter_by().all()[0: params['no_of_posts_on_home_page']]
-    return render_template('index.html', params= params, posts = posts ) #lhs is the posts object used in the index.html file and the rhs is the posts object declared in this function
+    posts = Posts.query.filter_by().all()
+    #[0:params['no_of_posts_on_home_page']]
+    last = math.ceil(  len(posts) / int(params['no_of_posts_on_home_page'])   )
+
+
+
+    page = request.args.get('page') #get the page number on which user is currently on
+    if(not str(page).isnumeric()): #is page number fetched is other than numeric value set page as 1
+        page = 1 #when initial not on any page set default as the first page
+    
+    page = int(page)
+    posts = posts[ (page-1) * int(params['no_of_posts_on_home_page']) : (page-1) * int(params['no_of_posts_on_home_page']) + int(params['no_of_posts_on_home_page'])]
+    
+    #pagination logic
+    if (page == 1):  #when on first page the prev in null and next is  +1
+        prev = "#"
+        next = "/?page=" + str(page+1)
+    elif(page == last):    #when on last page
+        prev = "/?page=" + str(page-1)
+        next = "#"
+    else:       #when present on any other page
+        prev = "/?page=" + str(page-1)
+        next = "/?page=" + str(page+1)
+
+    return render_template('index.html', params= params, posts = posts, prev = prev, next = next )
+    #lhs is the posts object used in the index.html file and the rhs is the posts object declared in this function
 
 @app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
@@ -117,7 +141,7 @@ def edit(sno):
         #when not cliccked on submit button yet the user will be shone the value of the attributes 
         # for that post on which the user currently is on
         post = Posts.query.filter_by(sno = sno ).first() 
-        return render_template('edit.html', params = params, post= post)
+        return render_template('edit.html', params = params,sno=sno, post= post)
 
 @app.route("/uploader", methods=['GET', 'POST'])
 def uploader():

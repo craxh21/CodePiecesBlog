@@ -9,14 +9,14 @@
         "gh_url": "https://github.com/codepieces",
         "blog_name": "Code Pieces",
         "about_text": "Hi.  This is Craxh. and this is my about page of the Code Pieces Blog page.",
-        "no_of_posts_on_home_page": 3,
+        "no_of_posts_on_home_page": 4,
 
         "gmail_user": "",        "//comment": "add your gmail you want to recieve email on email on",
         "gmail_password": "",
 
         "login_img": "login.svg",
         "admin_user": "craxh",
-        "admin_password":"craxh21blog",
+        "admin_password":"1",
 
         "upload_location": "C:\\Users\\Administrator\\OneDrive\\Desktop\\coding\\Python\\Learning_Python\\CodePiecesBlog\\files"
 

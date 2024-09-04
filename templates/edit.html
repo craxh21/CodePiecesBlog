@@ -29,7 +29,7 @@
 
                     <h1>Add or Edit Post</h1>
 
-                    <form id="contactForm" data-sb-form-api-token="API_TOKEN" action="/edit/{{post.sno}}" method="post">
+                    <form id="contactForm" data-sb-form-api-token="API_TOKEN" action="/edit/{{sno}}" method="post"><!--see why is it not working with post.sno-->
                                                          <!--change the action path here-->
                         <div class="form-floating">
                             <input type= 'text' class="form-control" id="title" name ='title' type="text" placeholder="title..." data-sb-validations="required"  value="{{post.title}}" /> <!--Showing values of the attributes to the user before editing-->
