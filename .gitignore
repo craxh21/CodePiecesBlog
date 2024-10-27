@@ -11,6 +11,7 @@ config.json
 
 # Distribution / packaging
 files/  
+static/css/styles.css
 
 .Python
 build/
